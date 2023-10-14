@@ -17,7 +17,7 @@ def fetch_medal_tally(df, year, country):
     if flag == 1:
         x = temp_df.groupby('Year').sum()[['Gold', 'Silver', 'Bronze']].sort_values('Year').reset_index()
     else:
-        x = temp_df.groupby('region').sum()[['Gold', 'Silver', 'Bronze']].sort_values('Gold',ascending=False).reset_index()
+        x = temp_df.groupby('region').sum(numeric_only=True)[['Gold', 'Silver', 'Bronze']].sort_values('Gold',ascending=False).reset_index()
 
     x['total'] = x['Gold'] + x['Silver'] + x['Bronze']
 
@@ -77,13 +77,14 @@ def country_event_heatmap(df,country):
     return pt
 
 
-def most_successful_countrywise(df, country):
+def most_successful_country(df, country):
+
     temp_df = df.dropna(subset=['Medal'])
 
     temp_df = temp_df[temp_df['region'] == country]
 
-    x = temp_df['Name'].value_counts().reset_index().head(10).merge(df, left_on='index', right_on='Name', how='left')[
-        ['index', 'Name_x', 'Sport']].drop_duplicates('index')
+
+    x = temp_df['Name'].value_counts().reset_index().head(10).merge(df, left_on='index', right_on='Name', how='left')[['index', 'Name_x', 'Sport']].drop_duplicates('index')
     x.rename(columns={'index': 'Name', 'Name_x': 'Medals'}, inplace=True)
     return x
 

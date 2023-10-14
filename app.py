@@ -109,7 +109,12 @@ if user_menu == 'Country-wise Analysis':
 
     st.sidebar.title('Country-wise Analysis')
 
-    country_list = df['region'].dropna().unique().tolist()
+    temp_df = df.dropna(subset=['Medal'])
+    temp_df.drop_duplicates(subset=['Team', 'NOC', 'Games', 'Year', 'City', 'Sport', 'Event', 'Medal'], inplace=True)
+
+
+
+    country_list = temp_df['region'].dropna().unique().tolist()
     country_list.sort()
 
     selected_country = st.sidebar.selectbox('Select a Country',country_list)
@@ -120,13 +125,13 @@ if user_menu == 'Country-wise Analysis':
     st.plotly_chart(fig)
 
     st.title(selected_country + " excels in the following sports")
-    pt = helper.country_event_heatmap(df,selected_country)
+    pt = helper.country_event_heatmap(df , selected_country)
     fig, ax = plt.subplots(figsize=(20, 20))
-    ax = sns.heatmap(pt,annot=True)
+    ax = sns.heatmap(pt , annot=True)
     st.pyplot(fig)
 
-    st.title("Top 10 athletes of " + selected_country)
-    top10_df = helper.most_successful_countrywise(df,selected_country)
+    st.title("Top athletes of " + selected_country)
+    top10_df = helper.most_successful_country(df, selected_country)
     st.table(top10_df)
 
 if user_menu == 'Athlete wise Analysis':

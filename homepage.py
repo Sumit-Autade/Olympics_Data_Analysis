@@ -1,7 +1,7 @@
-
+import streamlit as st
 from streamlit_option_menu import option_menu
 
-import streamlit as st
+
 
 
 
@@ -234,7 +234,7 @@ if selected == "Projects":
         st.pyplot(fig)
 
         st.title("Top 10 athletes of " + selected_country)
-        top10_df = helper.most_successful_countrywise(df, selected_country)
+        top10_df = helper.most_successful_country(df, selected_country)
         st.table(top10_df)
 
     if user_menu == 'Athlete wise Analysis':
